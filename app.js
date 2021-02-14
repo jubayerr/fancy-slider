@@ -25,12 +25,14 @@ const showImages = (images) => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
-    gallery.appendChild(div)
+    gallery.appendChild(div);
+    loadingSpinner(false);
   })
 
 }
 
 const getImages = (query) => {
+  loadingSpinner(true);
   fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`)
     .then((response) => response.json())
     .then(data => showImages(data.hits))
@@ -46,7 +48,8 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    element.classList.remove('added');
+    sliders.splice(item, 1);
   }
 }
 var timer
@@ -113,7 +116,15 @@ const changeSlide = (index) => {
 
   items[index].style.display = "block"
 }
-
+// search enter button
+document.getElementById("search")
+  .addEventListener("keyup", function (event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+      document.getElementById("search-btn").click();
+    }
+  });
+// search click button
 searchBtn.addEventListener('click', function () {
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
@@ -125,3 +136,14 @@ searchBtn.addEventListener('click', function () {
 sliderBtn.addEventListener('click', function () {
   createSlider()
 })
+
+// spinner extra section - 1
+
+const loadingSpinner = (show) => {
+  const spinner = document.getElementById('loading-spinner')
+  if (show) {
+    spinner.classList.remove('d-none');
+  } else {
+    spinner.classList.add('d-none');
+  }
+}
