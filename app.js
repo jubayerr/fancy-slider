@@ -69,13 +69,16 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  let duration = document.getElementById('duration').value;
+  if (duration < 1000) {
+    duration = 1000
+  }
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
     item.innerHTML = `<img class="w-100"
-    src="${slide}"
-    alt="">`;
+      src="${slide}"
+      alt="">`;
     sliderContainer.appendChild(item)
   })
   changeSlide(0)
