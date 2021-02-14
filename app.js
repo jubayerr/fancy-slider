@@ -28,15 +28,19 @@ const showImages = (images) => {
     gallery.appendChild(div);
     loadingSpinner(false);
   })
-
 }
 
-const getImages = (query) => {
+const getImages = async (query) => {
   loadingSpinner(true);
-  fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`)
-    .then((response) => response.json())
-    .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
+  const url = `https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    showImages(data.hits);
+  }
+  catch (error) {
+    displayError("Something went wrong! Please try again later!");
+  }
 }
 
 let slideIndex = 0;
@@ -52,6 +56,7 @@ const selectItem = (event, img) => {
     sliders.splice(item, 1);
   }
 }
+
 var timer
 const createSlider = () => {
   // check slider image length
@@ -118,9 +123,8 @@ const changeSlide = (index) => {
 }
 // search enter button
 document.getElementById("search")
-  .addEventListener("keyup", function (event) {
-    event.preventDefault();
-    if (event.keyCode === 13) {
+  .addEventListener("keypress", function (event) {
+    if (event.key == 'Enter') {
       document.getElementById("search-btn").click();
     }
   });
@@ -137,7 +141,7 @@ sliderBtn.addEventListener('click', function () {
   createSlider()
 })
 
-// spinner extra section - 1
+// spinner (extra section - 1)
 
 const loadingSpinner = (show) => {
   const spinner = document.getElementById('loading-spinner')
@@ -146,4 +150,11 @@ const loadingSpinner = (show) => {
   } else {
     spinner.classList.add('d-none');
   }
+}
+
+// display error message (extra section - 2)
+
+const displayError = error => {
+  const errorMessage = document.getElementById('display-error');
+  errorMessage.innerText = error;
 }
