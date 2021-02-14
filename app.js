@@ -7,10 +7,13 @@ const sliderContainer = document.getElementById('sliders');
 // selected image 
 let sliders = [];
 
+
 // If this key doesn't work
 // Find the name in the url and go to their website
 // to create your own api key
-const KEY = '19310765-9494f6ee1cd784c55df9eb7b3';
+
+const KEY = '20270758-da3b85107630527b3793e7bd3';
+
 
 // show images 
 const showImages = (images) => {
@@ -28,8 +31,8 @@ const showImages = (images) => {
 }
 
 const getImages = (query) => {
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
-    .then(response => response.json())
+  fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&pretty=true`)
+    .then((response) => response.json())
     .then(data => showImages(data.hits))
     .catch(err => console.log(err))
 }
